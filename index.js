@@ -485,11 +485,41 @@ app.post("/api/appointments/create", async (req, res) => {
 });
 
 //All Appointments
+//app.get("/api/appointments/all", async (req, res) => {
+ // try {
+ //   const data = await Appointment.find().sort({ createdAt: -1 });
+  ///  res.json(data);
+
+ // } catch (err) {
+  //  console.error("Fetch appointment error:", err);
+  //  res.status(500).json({ error: "Internal Server Error" });
+ // }
+//});
+// All Appointments with clinic and doctor names
 app.get("/api/appointments/all", async (req, res) => {
   try {
-    const data = await Appointment.find().sort({ createdAt: -1 });
-    res.json(data);
+    const appointments = await Appointment.find()
+      .sort({ createdAt: -1 })
+      .populate("clinicId", "name")
+      .populate("doctorId", "name");
 
+    const formatted = appointments.map((a) => ({
+      _id: a._id,
+      patientName: a.patientName,
+      patientContact: a.patientContact,
+      patientEmail: a.patientEmail,
+      reason: a.reason,
+      status: a.status,
+      appointmentDate: a.appointmentDate,
+      appointmentTime: a.appointmentTime,
+      clinicId: a.clinicId?._id || "",
+      clinicName: a.clinicId?.name || "Not selected",
+      doctorId: a.doctorId?._id || "",
+      doctorName: a.doctorId?.name || "Not selected",
+      createdAt: a.createdAt,
+    }));
+
+    res.json(formatted);
   } catch (err) {
     console.error("Fetch appointment error:", err);
     res.status(500).json({ error: "Internal Server Error" });
