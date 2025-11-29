@@ -21,6 +21,7 @@ const Clinic = require("./models/Clinic")
 const Doctor = require("./models/Doctor")
 const Service = require("./models/Services")
 const Servicelist = require("./models/Servicelist")
+const Appointment = require("./models/Appointment")
 
 //create clinic code  
 
@@ -464,6 +465,61 @@ app.put("/api/services/update", async (req, res) => {
   } catch (err) {
     console.error("Update error:", err);
     res.status(500).json({ error: "Update failed" });
+  }
+});
+
+//Appointment
+app.post("/api/appointments/create", async (req, res) => {
+  try {
+    const newAppointment = new Appointment(req.body);
+    await newAppointment.save();
+
+    res.json({ message: "Appointment created successfully" });
+
+  } catch (err) {
+    console.error("Create appointment error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//All Appointments
+app.get("/api/appointments/all", async (req, res) => {
+  try {
+    const data = await Appointment.find().sort({ createdAt: -1 });
+    res.json(data);
+
+  } catch (err) {
+    console.error("Fetch appointment error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//Update Appointment
+app.put("/api/appointments/update/:id", async (req, res) => {
+  try {
+    const updated = await Appointment.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json({ message: "Updated", data: updated });
+
+  } catch (err) {
+    console.error("Update appointment error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//Delete Appointment
+app.delete("/api/appointments/delete/:id", async (req, res) => {
+  try {
+    await Appointment.findByIdAndDelete(req.params.id);
+    res.json({ message: "Appointment deleted" });
+
+  } catch (err) {
+    console.error("Delete appointment error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
