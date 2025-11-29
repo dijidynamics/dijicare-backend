@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const appointmentSchema = new mongoose.Schema({
   patientName: {
@@ -14,7 +14,7 @@ const appointmentSchema = new mongoose.Schema({
   },
 
   reason: {
-    type: String, // e.g., "General Checkup", "Blood Test"
+    type: String,
     required: true,
   },
 
@@ -37,7 +37,7 @@ const appointmentSchema = new mongoose.Schema({
   },
 
   appointmentDate: {
-    type: Date, // user selected date
+    type: Date,
     required: true,
   },
 
@@ -55,5 +55,4 @@ const appointmentSchema = new mongoose.Schema({
   },
 });
 
-const Appointment = mongoose.model("Appointment", appointmentSchema);
-export default Appointment;
+module.exports = mongoose.model("Appointment", appointmentSchema);
