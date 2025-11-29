@@ -285,6 +285,8 @@ app.get("/api/services/clinic/:clinicId", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+
 app.delete("/api/services/:id", async (req, res) => {
   try {
     await Service.findByIdAndDelete(req.params.id);

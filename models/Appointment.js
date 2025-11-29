@@ -40,7 +40,7 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-
+  appointmentTime: { type: String, required: true }, // new time field
   visitedDate: {
     type: Date,
   },
